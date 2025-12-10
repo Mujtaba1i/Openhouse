@@ -24,8 +24,8 @@ router.get('/new', async (req,res)=>{
 
 router.get('/:id',async(req,res)=>{
     try {
-        const listing = await Listing.findById(req.params.id)
-        res.render('listings/show.ejs',{listing})
+        const populatedListings = await Listing.findById(req.params.id).populate('owner')
+        res.render('listings/show.ejs',{listing:populatedListings})
     } catch (err) {
         console.error('Ran into an error: '+err)
         console.log('REDIRECTING')

@@ -4,19 +4,24 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>All Listings</title>
+    <title><%= listing.owner.username %>'s listing</title>
 </head>
 
 <body>
     <%- include('../partials/_navbar.ejs') %>
         <h1>Street Address: <%= listing.streetAddress %></h1>
         <p>City: <%= listing.city %>, Size: <%= listing.size %>, Price: <%= listing.price %></p>
-        <form action="/listings/<%= listing._id %>/edit" method="get">
-            <button type="submit">Edit this listing</button>
-        </form>
-        <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-            <button type="submit">Delete this listing</button>
-        </form>
+        <% if (listing.owner._id.equals(user._id)) { %>
+            <h2>You own this!</h2>
+                    <form action="/listings/<%= listing._id %>/edit" method="get">
+                        <button type="submit">Edit this listing</button>
+                    </form>
+                    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+                        <button type="submit">Delete this listing</button>
+                    </form>
+            <% } else { %>
+                <p>You don't own this, <%= listing.owner.username %> does!</p>
+                <% } %>
 </body>
 
 </html>
