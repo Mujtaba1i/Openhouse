@@ -26,16 +26,17 @@ router.get('/new', async (req,res)=>{
 
 router.post('/', async (req,res)=>{
     try {
-        
-
+        req.body.owner = req.session.user._id
+        const listing = await Listing.create(req.body)
+        res.redirect('/listings')
     } 
     catch(err){
-    console.error('Ran into an error: '+err)
-    console.log('REDIRECTING')
-    res.redirect('/')
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
   }  
 })
 
-// exports ========================================================================================
+// exports =======================================================================================
 
 module.exports = router
