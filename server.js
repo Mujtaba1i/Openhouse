@@ -60,12 +60,11 @@ app.get("/", async (req, res) => {
 // auth Routes
 app.use('/auth' , authCtrl)
 
-// listings Routes
-app.use('/listings', listingCtrl)
-
 // Protected Routes ==================================================================================
 app.use(isSignedIn)
 
+// listings Routes
+app.use('/listings', listingCtrl)
 
 
 

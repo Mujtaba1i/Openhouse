@@ -25,7 +25,15 @@ router.get('/new', async (req,res)=>{
 // POST ===========================================================================================
 
 router.post('/', async (req,res)=>{
-    
+    try {
+        
+
+    } 
+    catch(err){
+    console.error('Ran into an error: '+err)
+    console.log('REDIRECTING')
+    res.redirect('/')
+  }  
 })
 
 // exports ========================================================================================
