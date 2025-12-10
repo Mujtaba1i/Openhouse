@@ -25,7 +25,8 @@ router.get('/new', async (req,res)=>{
 router.get('/:id',async(req,res)=>{
     try {
         const populatedListings = await Listing.findById(req.params.id).populate('owner')
-        res.render('listings/show.ejs',{listing:populatedListings})
+        const userHasFavorited = populatedListings.favoritedByUsers.some((user)=>user.equals(req.session.user._id))
+        res.render('listings/show.ejs',{listing:populatedListings,userHasFavorited})
     } catch (err) {
         console.error('Ran into an error: '+err)
         console.log('REDIRECTING')
@@ -64,7 +65,27 @@ router.post('/', async (req,res)=>{
 
 router.put('/:id', async (req,res)=>{
     try {
-        const listing = await Listing.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        const listing = await Listing.findById(req.params.id)
+        
+        if (listing.owner.equals(req.session.user._id)) {
+            await Listing.findByIdAndUpdate(req.params.id, req.body)
+            res.redirect(`/listings/${req.params.id}`)
+        }
+        else{
+            console.error('YOU DONT HAVE PERMISSION TO EDIT THIS LISTING')  
+            res.redirect('/')  
+        }
+    } 
+    catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+    }
+})
+
+router.post('/:id/favorited-by/:userId', async (req,res)=>{
+    try {
+        await Listing.findByIdAndUpdate(req.params.id,{$push:{favoritedByUsers:req.params.userId}})
         res.redirect(`/listings/${req.params.id}`)
     } 
     catch (err) {
@@ -78,8 +99,16 @@ router.put('/:id', async (req,res)=>{
 
 router.delete('/:id', async (req,res)=>{
     try {
-        await Listing.findByIdAndDelete(req.params.id)
-        res.redirect('/listings')
+        const listing = await Listing.findById(req.params.id)
+
+        if (listing.owner.equals(req.session.user._id)) {
+            await Listing.deleteOne({_id: req.params.id})
+            res.redirect('/listings')
+        }
+        else{
+            console.error('YOU DONT HAVE PERMISSION TO DELETE THIS LISTING')  
+            res.redirect('/')  
+        }
     } 
     catch (err) {
         console.error('Ran into an error: '+err)
@@ -87,6 +116,19 @@ router.delete('/:id', async (req,res)=>{
         res.redirect('/')
     }
 })
+
+
+router.delete('/:listingId/favorited-by/:userId', async (req, res) => {
+  try {
+    await Listing.findByIdAndUpdate(req.params.listingId, {$pull: { favoritedByUsers: req.params.userId }});
+    res.redirect(`/listings/${req.params.listingId}`);
+  } catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+  }
+});
+
 
 // exports =======================================================================================
 

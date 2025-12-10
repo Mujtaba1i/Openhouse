@@ -13,15 +13,32 @@
         <p>City: <%= listing.city %>, Size: <%= listing.size %>, Price: <%= listing.price %></p>
         <% if (listing.owner._id.equals(user._id)) { %>
             <h2>You own this!</h2>
-                    <form action="/listings/<%= listing._id %>/edit" method="get">
-                        <button type="submit">Edit this listing</button>
-                    </form>
-                    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-                        <button type="submit">Delete this listing</button>
-                    </form>
-            <% } else { %>
-                <p>You don't own this, <%= listing.owner.username %> does!</p>
-                <% } %>
+            <form action="/listings/<%= listing._id %>/edit" method="get">
+                <button type="submit">Edit this listing</button>
+            </form>
+            <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+                <button type="submit">Delete this listing</button>
+            </form>
+        <% } else { %>
+            <p>You don't own this, <%= listing.owner.username %> does!</p>
+        <% } %>
+
+        <h2>Favorites</h2>
+        <p>Favorited by <%= listing.favoritedByUsers.length %> people.</p>
+        
+        <% if (userHasFavorited) { %>
+            <p>You've favorited this listing!</p>
+            <form action="/listings/<%= listing._id %>/favorited-by/<%= user._id %>?_method=DELETE" method="POST">
+                <button type="submit">Unfavorite it</button>
+            </form>
+            
+        <% } else { %>
+            <p>You haven't favorited this listing.</p>
+            <form action="/listings/<%= listing._id %>/favorited-by/<%= user._id %>" method="POST">
+                <button type="submit">Favorite it!</button>
+            </form>
+        <% } %>
+    
 </body>
 
 </html>
