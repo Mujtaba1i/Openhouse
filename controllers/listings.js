@@ -64,7 +64,8 @@ router.post('/', async (req,res)=>{
 
 router.put('/:id', async (req,res)=>{
     try {
-        
+        const listing = await Listing.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        res.redirect(`/listings/${req.params.id}`)
     } 
     catch (err) {
         console.error('Ran into an error: '+err)
@@ -77,7 +78,8 @@ router.put('/:id', async (req,res)=>{
 
 router.delete('/:id', async (req,res)=>{
     try {
-        
+        await Listing.findByIdAndDelete(req.params.id)
+        res.redirect('/listings')
     } 
     catch (err) {
         console.error('Ran into an error: '+err)
