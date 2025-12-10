@@ -10,6 +10,13 @@
 <body>
     <%- include('../partials/_navbar.ejs') %>
         <h1>Street Address: <%= listing.streetAddress %></h1>
+        <p>City: <%= listing.city %>, Size: <%= listing.size %>, Price: <%= listing.price %></p>
+        <form action="/listings/<%= listing._id %>/edit" method="get">
+            <button type="submit">Edit this listing</button>
+        </form>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+            <button type="submit">Delete this listing</button>
+        </form>
 </body>
 
 </html>

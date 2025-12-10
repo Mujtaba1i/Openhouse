@@ -33,6 +33,18 @@ router.get('/:id',async(req,res)=>{
     }
 })
 
+router.get('/:id/edit', async (req,res)=>{
+    try {
+        const listing = await Listing.findById(req.params.id)
+        res.render('listings/edit.ejs', {listing})
+    } 
+    catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+    }
+})
+
 // POST ===========================================================================================
 
 router.post('/', async (req,res)=>{
@@ -46,6 +58,32 @@ router.post('/', async (req,res)=>{
         console.log('REDIRECTING')
         res.redirect('/')
   }  
+})
+
+// UPDATE (PUT) ==================================================================================
+
+router.put('/:id', async (req,res)=>{
+    try {
+        
+    } 
+    catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+    }
+})
+
+// DELETE ========================================================================================
+
+router.delete('/:id', async (req,res)=>{
+    try {
+        
+    } 
+    catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+    }
 })
 
 // exports =======================================================================================
