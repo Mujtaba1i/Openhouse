@@ -22,6 +22,17 @@ router.get('/new', async (req,res)=>{
     res.render('listings/new.ejs')
 })
 
+router.get('/:id',async(req,res)=>{
+    try {
+        const listing = await Listing.findById(req.params.id)
+        res.render('listings/show.ejs',{listing})
+    } catch (err) {
+        console.error('Ran into an error: '+err)
+        console.log('REDIRECTING')
+        res.redirect('/')
+    }
+})
+
 // POST ===========================================================================================
 
 router.post('/', async (req,res)=>{
