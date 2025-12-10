@@ -8,8 +8,8 @@ const Listing = require('../models/listing')
 
 router.get('/', async (req,res)=>{
     try{
-        const listings = await Listing.find()
-        res.render('listings/index.ejs', {listings})
+        const populatedListings = await Listing.find().populate('owner')
+        res.render('listings/index.ejs', {populatedListings})
     }
     catch(err){
         console.error('Ran into an error: '+err)
