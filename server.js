@@ -19,6 +19,7 @@ require('./config/database.js');
 // controller(s) =====================================================================================
 
 const authCtrl = require("./controllers/auth")
+const listingCtrl = require("./controllers/listings.js")
 
 // cookies ===========================================================================================
 
@@ -62,9 +63,8 @@ app.use('/auth' , authCtrl)
 
 // Protected Routes ==================================================================================
 app.use(isSignedIn)
-app.get('/vip-lounge', async(req,res)=>{
-    res.send('VIP PAGE')
-})
+
+app.use('/listings', listingCtrl)
 
 
 
